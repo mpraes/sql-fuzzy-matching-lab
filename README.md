@@ -31,9 +31,26 @@ git clone [https://github.com/SEU_USUARIO/sql-fuzzy-lab.git](https://github.com/
 cd sql-fuzzy-lab
 ```
 
-#### 2️⃣ Gere o Caos (CSV Sujo)
+#### 2️⃣ Baixe os Dados Limpos (Receita Federal)
 
-Use o script em `python/gerador_caos.py` para gerar dados de teste:
+O gerador de caos usa como base os dados abertos da Receita Federal. Faça o download:
+
+1. Acesse: [https://arquivos.receitafederal.gov.br/dados/cnpj/dados_abertos_cnpj/](https://arquivos.receitafederal.gov.br/dados/cnpj/dados_abertos_cnpj/)
+2. Baixe o arquivo **`Empresa.zip`** (dados de empresas)
+3. Descompacte e rename para `data/empresas_limpas.csv`
+
+```bash
+# Exemplo (ajuste conforme o arquivo baixado)
+unzip Empresa.zip -d temp/
+mv temp/Empresa.csv data/empresas_limpas.csv
+rm -rf temp/
+```
+
+> **Nota:** Este CSV contém +10M de registros reais do Brasil. O script Python usará este como base para gerar variações "sujas".
+
+#### 4️⃣ Gere o Caos (CSV Sujo)
+
+Use o script em `python/gerador_caos.py` para gerar dados de teste (baseado no CSV limpo):
 
 ```bash
 # Gerar tudo (~4.7M linhas, pode levar alguns minutos)
@@ -48,7 +65,7 @@ python3 python/gerador_caos.py --validate-only --output data/empresas_sujas.csv
 
 Saída esperada: `data/empresas_sujas.csv` (delimitador `;`, com header)
 
-#### 3️⃣ Suba o Banco de Dados
+#### 5️⃣ Suba o Banco de Dados
 
 ```bash
 docker compose up -d
@@ -60,7 +77,7 @@ O arquivo `docker-compose.yml` automaticamente:
 
 > **Importante:** Gere `data/empresas_sujas.csv` **antes** de `docker compose up`, pois o `init.sql` executa na inicialização.
 
-#### 4️⃣ Conecte-se e Divirta-se 🎉
+#### 6️⃣ Conecte-se e Divirta-se 🎉
 
 ```bash
 Host:       localhost
