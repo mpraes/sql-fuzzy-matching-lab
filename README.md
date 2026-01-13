@@ -98,11 +98,56 @@ docker compose exec -T database psql -U admin -d cnpj_lab -c "SELECT count(*) FR
 - [x] Infraestrutura como Código (Docker)
 - [x] Gerador de Dados Sujos (Python + CSV)
 - [x] Carregamento em Staging (PostgreSQL COPY)
-- [ ] Padronização de Strings (TRIM, UPPER, UNACCENT)
-- [ ] Limpeza de Máscaras e RegEx
+- [x] Padronização de Strings (RegEx, TRANSLATE, TRIM)
+- [x] Limpeza de Máscaras e RegEx
 - [ ] Algoritmos Fonéticos (Soundex)
 - [ ] Distância de Edição (Levenshtein)
 - [ ] Deduplicação de Registros
+
+## 🔍 Queries de Exemplo (#sqlpilulas)
+
+As queries demonstram técnicas práticas de limpeza e normalização de dados. Todas estão em `sql/book_queries/`:
+
+### 📌 Post 1: Regularização com RegEx
+**Arquivo:** [query_post1.sql](sql/book_queries/query_post1.sql)
+
+Técnica para remover números indesejados no final de strings usando `REGEXP_REPLACE`:
+```sql
+REGEXP_REPLACE(nome_fantasia, '[0-9]+$', '')
+```
+**Caso de uso:** Nomes de empresas com CPF/CNPJ concatenados ao final.
+
+---
+
+### 📌 Post 2: Limpeza de Pontuação com TRANSLATE
+**Arquivo:** [query_post2.sql](sql/book_queries/query_post2.sql)
+
+Mais eficiente que múltiplos REPLACE para remover caracteres especiais:
+```sql
+TRANSLATE(nome_fantasia, '.-/', '')  -- Remove ponto, traço, barra
+```
+**Caso de uso:** CEP com ou sem máscara, nomes com pontuação variada.
+
+---
+
+### 📌 Post 3: Remoção de Sufixos Corporativos
+**Arquivo:** [query_post3.sql](sql/book_queries/query_post3.sql)
+
+Elimina termos como LTDA, ME, S.A. que atrapalham a comparação:
+```sql
+REGEXP_REPLACE(nome_fantasia, '\s+(LTDA|ME|EPP|EIRELI|S\.A\.|S/A|LIMITADA)\.?$', '', 'gi')
+```
+**Caso de uso:** Encontrar o "núcleo" do nome da empresa ignorando sufixos legais.
+
+---
+
+### 📌 Post 4: [Em Breve]
+**Arquivo:** [query_post4.sql](sql/book_queries/query_post4.sql)
+
+---
+
+### 📌 Post 5: [Em Breve]
+**Arquivo:** [query_post5.sql](sql/book_queries/query_post5.sql)
 
 ## 🔧 Operações Avançadas
 

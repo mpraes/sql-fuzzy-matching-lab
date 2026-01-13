@@ -12,11 +12,11 @@ services:
       - "5432:5432"
     volumes:
       # Persistência de dados
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/dataset
       # Script de inicialização (Roda automaticamente na criação)
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
       # CSV gerado no host disponível para o COPY em init.sql (fora do PGDATA para evitar chown)
-      - ./data/empresas_sujas.csv:/docker-entrypoint-initdb.d/empresas_sujas.csv:ro
+      - ./dataset/empresas_sujas.csv:/docker-entrypoint-initdb.d/empresas_sujas.csv:ro
     restart: always
 
 volumes:
